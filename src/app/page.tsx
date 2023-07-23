@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 import { getClient } from "@/lib/client";
 import { DocumentRenderer } from '@keystone-6/document-renderer';
+import React from 'react';
 // import styles from './page.module.css';
 
 
@@ -24,12 +25,20 @@ export default async function Home() {
     }, 
   });
 
-  return <div>{data.posts.map((post) => {
-    return (
-      <>
-        <h2>{post.title}</h2>
-        <DocumentRenderer document={post.content.document} />
-      </>
-    )
-  })}</div>;
+  console.log(data, 'DATA'); // You'll only see this log in the terminal (not browser console) as it's server-side
+
+  return (
+    <>
+      {data.posts ? (
+        data.posts.map((post) => (
+          <React.Fragment key={post.id}>
+            <h2>{post.title}</h2>
+            <DocumentRenderer document={post.content.document} />
+          </React.Fragment>
+        ))
+      ) : (
+        "No posts yet..."
+      )}
+    </>
+  );
 }
